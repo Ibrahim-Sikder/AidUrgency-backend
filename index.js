@@ -22,8 +22,8 @@ async function run() {
         await client.connect();
         console.log("Connected to MongoDB");
 
-        const db = client.db('assignment');
-        const collection = db.collection('users');
+        const db = client.db('AidUrgency');
+        const collection = db.collection('donations');
 
         // User Registration
         app.post('/api/v1/register', async (req, res) => {
@@ -77,10 +77,29 @@ async function run() {
         });
 
 
-        // ==============================================================
-        // WRITE YOUR CODE HERE
-        // ==============================================================
-
+       // donaton related api
+       app.get("/services", async (req, res) => {
+        const service = await serviceCollection.find().toArray();
+        res.send(service);
+      });
+  
+      app.get("/services/:id", async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const result = await serviceCollection.findOne(filter);
+        res.send(result);
+      });
+      app.post('/services', async(req, res)=>{
+        const service = req.body;
+        const result = await serviceCollection.insertOne(service);
+        res.send(result)
+      })
+      app.delete('/services/:id', async(req, res)=>{
+        const id = req.params.id;
+        const filter = {_id: new ObjectId(id)}
+        const result = await serviceCollection.deleteOne(filter)
+        res.send(result)
+      })
 
         // Start the server
         app.listen(port, () => {
