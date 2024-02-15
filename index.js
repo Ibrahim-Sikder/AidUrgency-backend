@@ -84,7 +84,7 @@ async function run() {
         res.send(donations);
       });
   
-      app.get("/services/:id", async (req, res) => {
+      app.get("/api/v1/donations/:id", async (req, res) => {
         const id = req.params.id;
         const filter = { _id: new ObjectId(id) };
         const result = await donateCollection.findOne(filter);
