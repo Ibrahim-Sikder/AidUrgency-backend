@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
@@ -23,7 +23,8 @@ async function run() {
         console.log("Connected to MongoDB");
 
         const db = client.db('AidUrgency');
-        const collection = db.collection('donations');
+        const collection = db.collection('users');
+        const donateCollection = db.collection('donations');
 
         // User Registration
         app.post('/api/v1/register', async (req, res) => {
@@ -78,26 +79,26 @@ async function run() {
 
 
        // donaton related api
-       app.get("/services", async (req, res) => {
-        const service = await serviceCollection.find().toArray();
-        res.send(service);
+       app.get("/api/v1/donations", async (req, res) => {
+        const donations = await donateCollection.find().limit(8).toArray();
+        res.send(donations);
       });
   
       app.get("/services/:id", async (req, res) => {
         const id = req.params.id;
         const filter = { _id: new ObjectId(id) };
-        const result = await serviceCollection.findOne(filter);
+        const result = await donateCollection.findOne(filter);
         res.send(result);
       });
-      app.post('/services', async(req, res)=>{
+      app.post('/api/v1/donations', async(req, res)=>{
         const service = req.body;
-        const result = await serviceCollection.insertOne(service);
+        const result = await donateCollection.insertOne(service);
         res.send(result)
       })
-      app.delete('/services/:id', async(req, res)=>{
+      app.delete('/api/v1/donations/:id', async(req, res)=>{
         const id = req.params.id;
         const filter = {_id: new ObjectId(id)}
-        const result = await serviceCollection.deleteOne(filter)
+        const result = await donateCollection.deleteOne(filter)
         res.send(result)
       })
 
