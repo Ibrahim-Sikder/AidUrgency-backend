@@ -24,10 +24,12 @@ async function run() {
 
         const db = client.db('AidUrgency');
         const collection = db.collection('users');
+        const donarCollection = db.collection('donars');
         const donateCollection = db.collection('donations');
 
         // User Registration
         app.post('/api/v1/register', async (req, res) => {
+            console.log(req.body)
             const { name, email, password } = req.body;
 
             // Check if email already exists
@@ -53,6 +55,7 @@ async function run() {
 
         // User Login
         app.post('/api/v1/login', async (req, res) => {
+            console.log(req.body)
             const { email, password } = req.body;
 
             // Find user by email
@@ -99,6 +102,14 @@ async function run() {
         const id = req.params.id;
         const filter = {_id: new ObjectId(id)}
         const result = await donateCollection.deleteOne(filter)
+        res.send(result)
+      })
+
+
+      // donar api
+      app.post('/api/v1/donars', async(req, res)=>{
+        const donars = req.body;
+        const result = await donarCollection.insertOne(donars);
         res.send(result)
       })
 
