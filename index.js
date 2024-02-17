@@ -91,6 +91,10 @@ async function run() {
       const donations = await donateCollection.find().toArray();
       res.send(donations);
     });
+    app.get("/api/v1/login", async (req, res) => {
+      const donations = await collection.find().toArray();
+      res.send(donations);
+    });
 
     app.get("/api/v1/donations/:id", async (req, res) => {
       const id = req.params.id;
