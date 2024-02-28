@@ -29,6 +29,7 @@ async function run() {
     const collection = db.collection("users");
     const donarCollection = db.collection("donars");
     const donateCollection = db.collection("donations");
+    const commentCollection = db.collection("comments");
 
     // User Registration
     app.post("/api/v1/register", async (req, res) => {
@@ -85,6 +86,19 @@ async function run() {
         email,
       });
     });
+
+    // comments
+    app.get("/api/v1/comments", async (req, res) => {
+      const comments = await commentCollection.find().toArray();
+      res.send(comments);
+    });
+    app.post("/api/v1/comments", async (req, res) => {
+      const comments = req.body;
+      const result = await commentCollection.insertOne(comments);
+      res.send(result);
+    });
+
+
 
     // donaton related api
     app.get("/api/v1/donations", async (req, res) => {
