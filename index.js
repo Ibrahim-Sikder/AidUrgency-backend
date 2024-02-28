@@ -31,6 +31,7 @@ async function run() {
     const donateCollection = db.collection("donations");
     const commentCollection = db.collection("comments");
     const reviewCollection = db.collection("reviews");
+    const volunteerCollection = db.collection("volunteers");
 
     // User Registration
     app.post("/api/v1/register", async (req, res) => {
@@ -101,14 +102,27 @@ async function run() {
 
     // review api
     app.get("/api/v1/review", async (req, res) => {
-      const review = await commentCollection.find().toArray();
+      const review = await reviewCollection.find().toArray();
       res.send(review);
     });
     app.post("/api/v1/review", async (req, res) => {
       const review = req.body;
-      const result = await commentCollection.insertOne(review);
+      const result = await reviewCollection.insertOne(review);
       res.send(result);
     });
+
+
+       // volunteer api
+       app.get("/api/v1/volunteers", async (req, res) => {
+        const review = await volunteerCollection.find().toArray();
+        res.send(review);
+      });
+      app.post("/api/v1/volunteers", async (req, res) => {
+        const review = req.body;
+        const result = await volunteerCollection.insertOne(review);
+        res.send(result);
+      });
+  
 
 
     // donation related api
